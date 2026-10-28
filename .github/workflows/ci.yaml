@@ -25,6 +25,7 @@ jobs:
   workflow-lint:
     name: Workflow Lint
     runs-on: ubuntu-26.04
+    timeout-minutes: 2
     permissions:
       contents: read
     steps:
@@ -55,6 +56,7 @@ jobs:
       - workflow-lint
     runs-on: ubuntu-26.04
     permissions: {}
+    timeout-minutes: 2
     steps:
       - name: Any jobs failed?
         if: ${{ contains(needs.*.result, 'failure') }}

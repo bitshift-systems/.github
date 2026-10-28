@@ -26,10 +26,15 @@ env:
   SAFE_SETTINGS_VERSION: 3.0.0
   SAFE_SETTINGS_DIR: ${{ github.workspace }}/.safe-settings
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   full-sync:
     name: Reconcile org repository settings
     runs-on: ubuntu-26.04
+    timeout-minutes: 10
     steps:
       # Only for .mise, so Setup Mise installs the pinned Node rather than
       # falling back to whatever the runner image ships.
