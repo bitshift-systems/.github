@@ -1,0 +1,38 @@
+---
+# yaml-language-server: $schema=https://json.schemastore.org/github-action.json
+name: Setup repo
+description: Sets up the repository's toolchain with Mise
+
+inputs:
+  cache:
+    description: Whether or not to use caches
+    default: "true"
+
+  cache-key:
+    description: Shared cache key to use
+    default: default
+
+runs:
+  using: composite
+  steps:
+    - name: Setup Mise
+      uses: jdx/mise-action@82a612c5ab8bcda7cc5db6b7e81a8e7584c3dc6e # v5.2.3
+      with:
+        install: true
+        cache: ${{ inputs.cache }}
+        cache_key_prefix: ${{ inputs.cache-key }}-mise
+
+    - id: toolchains
+      if: ${{ inputs.cache == 'true' }}
+      name: Detect language toolchains
+      shell: bash
+      run: |
+        {
+          echo "rust=$(mise ls --current --json rust | jq -r length)"
+        } >> "${GITHUB_OUTPUT}"
+
+    - name: Rust cache
+      if: ${{ inputs.cache == 'true' && steps.toolchains.outputs.rust > 0 }}
+      uses: Swatinem/rust-cache@6323deb102c322ba6fcbdcafc7e3dddab59af2b6 # v2
+      with:
+        prefix-key: ${{ inputs.cache-key }}-rust
