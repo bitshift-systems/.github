@@ -54,14 +54,17 @@ provenance = "github-attestations"
 
 [[tools.oxfmt]]
 version = "0.75.0"
-aube = { path = "locks/oxfmt/0.75.0", digest = "sha256:1d4f470a5dbba272218132db6ff9ba1911075d29dcd3253a0e02b4a5037a8a23" }
+aube = { path = "locks/oxfmt/0.75.0", digest = "sha256:ef5b827c78494795478d3f9fd2352df291b4650435ec4b445026fa44e74a974c" }
 backend = "npm:oxfmt"
 specifiers = ["0.75.0"]
 
 [[tools.shellcheck]]
 version = "0.11.0"
 backend = "aqua:koalaman/shellcheck"
-specifiers = ["latest"]
+specifiers = [
+    "0.11.0",
+    "latest",
+]
 
 [tools.shellcheck."platforms.linux-arm64"]
 checksum = "sha256:12b331c1d2db6b9eb13cfca64306b1b157a86eb69db83023e261eaa7e7c14588"
