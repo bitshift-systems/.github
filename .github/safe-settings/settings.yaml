@@ -1,5 +1,7 @@
 labels:
   exclude:
+    # Labeler managed
+    - name: ^area/
     # Release Please managed
     - name: "autorelease: pending"
     - name: "autorelease: tagged"
