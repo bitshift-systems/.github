@@ -3,6 +3,12 @@
 # `name` and rules are concatenated, so this may only add rule types the
 # baseline does not already define.
 
+teams:
+  - name: tactica
+    permission: maintain
+  - name: tactica-admins
+    permission: admin
+
 rulesets:
   - name: main
     rules:

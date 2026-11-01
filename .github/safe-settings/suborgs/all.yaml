@@ -24,6 +24,27 @@ suborgrepos:
   # ruleset with no `enforcement` and every full-sync run 422s.
   - ".github"
 
+repository:
+  # squash-only for release-please to work best
+  allow_squash_merge: true
+  allow_merge_commit: false
+  allow_rebase_merge: false
+  squash_merge_commit_title: PR_TITLE
+  squash_merge_commit_message: PR_BODY
+  default_branch: main
+  has_wiki: false
+  has_projects: false
+  security:
+    enableVulnerabilityAudits: true
+    enableAutomatedSecurityFixes: false
+  security_and_analysis:
+    advanced_security:
+      status: disabled
+    secret_scanning:
+      status: disabled
+    secret_scanning_push_protection:
+      status: disabled
+
 rulesets:
   - name: main
     target: branch

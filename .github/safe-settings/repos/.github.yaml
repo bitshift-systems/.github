@@ -9,6 +9,12 @@
 # considered, which is why this repo had no ruleset at all (not even the
 # baseline) while every other repo did.
 
+teams:
+  - name: engineering
+    permission: maintain
+  - name: engineering-admins
+    permission: admin
+
 rulesets:
   - name: main
     rules:
