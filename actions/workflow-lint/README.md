@@ -24,9 +24,3 @@ jobs:
 ```
 
 Reference it by commit SHA.
-
-## Inputs
-
-| Input                 | Default  | Description                   |
-| --------------------- | -------- | ----------------------------- |
-| `jactionlint-version` | `latest` | Version of jactionlint to run |
