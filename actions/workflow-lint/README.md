@@ -4,7 +4,11 @@ Lints workflows and action definitions with [jactionlint](https://jactionlint.jd
 
 ## Usage
 
-The action lints the working directory, so the repository must be checked out first.
+> [!IMPORTANT]
+> Before calling this action, check out the repository that you want to lint.
+> Declare `jactionlint` and `shellcheck` in that repository's Mise configuration, such as `mise.toml` or `.mise/config.toml`.
+> The action uses the calling repository's tool versions. It does not load the Mise configuration from `bitshift-systems/.github`.
+> To quickly add both tools, run `mise use --pin jactionlint@latest shellcheck@latest`.
 
 ```
 jobs:
