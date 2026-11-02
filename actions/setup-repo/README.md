@@ -29,7 +29,8 @@ Reference it by commit SHA.
 
 ## Inputs
 
-| Input       | Default   | Description                                           |
-| ----------- | --------- | ----------------------------------------------------- |
-| `cache`     | `true`    | Whether or not to enable caching for this run         |
-| `cache-key` | `default` | Shared cache key for all caches opened by this action |
+| Input          | Default   | Description                                               |
+| -------------- | --------- | --------------------------------------------------------- |
+| `cache`        | `true`    | Whether or not to enable caching for this run             |
+| `cache-key`    | `default` | Shared cache key for all caches opened by this action     |
+| `install-args` | Empty     | Any `install` arguments to pass to the underlying action. |
