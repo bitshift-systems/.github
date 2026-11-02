@@ -29,6 +29,7 @@ runs:
       run: |
         {
           echo "rust=$(mise ls --current --json rust | jq -r length)"
+          echo "pnpm=$(mise ls --current --json pnpm | jq -r length)"
         } >> "${GITHUB_OUTPUT}"
 
     - name: Rust cache
@@ -36,3 +37,23 @@ runs:
       uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
       with:
         prefix-key: ${{ inputs.cache-key }}-rust
+
+    - name: Determine PNPM configuration
+      id: pnpm-config
+      if: ${{ inputs.cache == 'true' && steps.toolchains.outputs.pnpm > 0 }}
+      shell: bash
+      run: |
+        {
+          echo "path=$(pnpm store path --silent)"
+          echo "pnpm-version=$(pnpm --version)"
+          echo "node-version=$(node --version)"
+        } >> "${GITHUB_OUTPUT}"
+
+    - name: Set up PNPM cache
+      if: ${{ inputs.cache == 'true' && steps.toolchains.outputs.pnpm > 0 }}
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+      with:
+        path: ${{ steps.pnpm-config.outputs.path }}
+        key: ${{ inputs.cache-key }}-pnpm-${{ runner.os }}-${{ runner.arch }}-${{ steps.pnpm-config.outputs.pnpm-version }}-${{ steps.pnpm-config.outputs.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ inputs.cache-key }}-pnpm-${{ runner.os }}-${{ runner.arch }}-${{ steps.pnpm-config.outputs.pnpm-version }}-${{ steps.pnpm-config.outputs.node-version }}-
