@@ -6,7 +6,7 @@ runs:
   using: composite
   steps:
     - name: Setup repo
-      uses: $/actions/mise-action
+      uses: $/actions/setup-repo
       with:
         install-args: jactionlint shellcheck
     - name: Run jactionlint
