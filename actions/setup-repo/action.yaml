@@ -12,6 +12,10 @@ inputs:
     description: Shared cache key to use
     default: default
 
+  install-args:
+    description: Arguments to pass to the underlying Mise action
+    default: ''
+
 runs:
   using: composite
   steps:
@@ -19,6 +23,7 @@ runs:
       uses: jdx/mise-action@6be3c7ed4c21d4f76b208d351d95aac273ebb76d # v5.2.4
       with:
         install: true
+        install_args: ${{ inputs.install-args }}
         cache: ${{ inputs.cache }}
         cache_key_prefix: ${{ inputs.cache-key }}-mise
 
@@ -28,8 +33,8 @@ runs:
       shell: bash
       run: |
         {
-          echo "rust=$(mise ls --current --json rust | jq -r length)"
-          echo "pnpm=$(mise ls --current --json pnpm | jq -r length)"
+          echo "rust=$(mise ls --current --installed --json rust | jq -r length)"
+          echo "pnpm=$(mise ls --current --installed --json pnpm | jq -r length)"
         } >> "${GITHUB_OUTPUT}"
 
     - name: Rust cache

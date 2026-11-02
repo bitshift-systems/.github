@@ -1,24 +1,15 @@
 ---
 # yaml-language-server: $schema=https://json.schemastore.org/github-action.json
 name: Workflow Lint
-description: Lint workflows and action definitions with actionlint and zizmor
-
-inputs:
-  jactionlint-version:
-    description: Version of jactionlint to run
-    default: latest
-
+description: Lint workflows and action definitions jactionlint
 runs:
   using: composite
   steps:
-    - name: Setup Mise
-      uses: jdx/mise-action@6be3c7ed4c21d4f76b208d351d95aac273ebb76d # v5.2.4
+    - name: Setup repo
+      uses: $/actions/setup-repo
       with:
-        install: false
-
+        install-args: jactionlint shellcheck
     - name: Run jactionlint
       shell: bash
-      env:
-        JACTIONLINT_VERSION: ${{ inputs.jactionlint-version }}
       run: |
-        mise exec jactionlint@"${JACTIONLINT_VERSION}" -- jactionlint --format github
+        jactionlint --format github
