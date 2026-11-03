@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.1.0](https://github.com/bitshift-systems/.github/compare/setup-repo-v2.0.0...setup-repo-v2.1.0) (2026-11-03)
+
+
+### Features
+
+* **setup-repo:** add aube caching and broaden cache fallbacks ([#14](https://github.com/bitshift-systems/.github/issues/14)) ([a50d66b](https://github.com/bitshift-systems/.github/commit/a50d66b18b15930192d22a20830274c5de031746))
+
+
+### Miscellaneous Chores
+
+* **github-action:** update action actions/cache (v6.0.0 → v6.1.0) ([#15](https://github.com/bitshift-systems/.github/issues/15)) ([204fd4b](https://github.com/bitshift-systems/.github/commit/204fd4b4a25b24d934e7fedb488aa78f513fc1be))
+
 ## [2.0.0](https://github.com/bitshift-systems/.github/compare/setup-repo-v1.0.1...setup-repo-v2.0.0) (2026-11-02)
 
 
