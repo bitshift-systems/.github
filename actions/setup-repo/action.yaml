@@ -84,7 +84,7 @@ runs:
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
       with:
         path: ${{ steps.aube-config.outputs.path }}
-        key: ${{ inputs.cache-key }}-aube-${{ runner.os }}-${{ runner.arch }}-${{ steps.aube-config.outputs.aube-version }}-${{ steps.aube-config.outputs.node-version }}-${{ hashFiles('**/aube-lock.yaml') }}
+        key: ${{ inputs.cache-key }}-aube-${{ runner.os }}-${{ runner.arch }}-${{ steps.aube-config.outputs.aube-version }}-${{ steps.aube-config.outputs.node-version }}-${{ hashFiles('**/aube-lock.yaml', '**/pnpm-lock.yaml', '**/bun.lock', '**/yarn.lock', '**/npm-shrinkwrap.lock', '**/package-lock.json') }}
         restore-keys: |
           ${{ inputs.cache-key }}-aube-${{ runner.os }}-${{ runner.arch }}-${{ steps.aube-config.outputs.aube-version }}-${{ steps.aube-config.outputs.node-version }}-
           ${{ inputs.cache-key }}-aube-${{ runner.os }}-${{ runner.arch }}-${{ steps.aube-config.outputs.aube-version }}-
