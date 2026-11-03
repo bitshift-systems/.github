@@ -36,6 +36,8 @@ runs:
           echo "rust=$(mise ls --current --installed --json rust | jq -r length)"
           echo "pnpm=$(mise ls --current --installed --json pnpm | jq -r length)"
           echo "aube=$(mise ls --current --installed --json aube | jq -r length)"
+          echo "dotnet=$(mise ls --current --installed --json dotnet | jq -r length)"
+          echo "terraform=$(mise ls --current --installed --json terraform | jq -r length)"
         } >> "${GITHUB_OUTPUT}"
 
     - name: Rust cache
@@ -43,6 +45,27 @@ runs:
       uses: Swatinem/rust-cache@d1527c8f67ef9af357290475d4af4b0fab8f12e0 # v2.9.3
       with:
         prefix-key: ${{ inputs.cache-key }}-rust
+
+    - name: Determine .NET configuration
+      id: dotnet-config
+      if: ${{ inputs.cache == 'true' && steps.toolchains.outputs.dotnet > 0 }}
+      shell: bash
+      run: |
+        {
+          echo "dotnet-version=$(dotnet --version)"
+        } >> "${GITHUB_OUTPUT}"
+
+    - name: Setup .NET cache
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      if: "${{ inputs.cache == 'true' && steps.toolchains.outputs.dotnet > 0 }}"
+      with:
+        path: ~/.nuget/packages
+        key: ${{ inputs.cache-key }}-nuget-${{ runner.os }}-${{ runner.arch }}-${{ steps.dotnet-config.outputs.dotnet-version }}-${{ hashFiles('**/packages.lock.json') }}
+        restore-keys: |
+          ${{ inputs.cache-key }}-nuget-${{ runner.os }}-${{ runner.arch }}-${{ steps.dotnet-config.outputs.dotnet-version }}-
+          ${{ inputs.cache-key }}-nuget-${{ runner.os }}-${{ runner.arch }}-
+          ${{ inputs.cache-key }}-nuget-${{ runner.os }}-
+          ${{ inputs.cache-key }}-nuget-
 
     - name: Determine PNPM configuration
       id: pnpm-config
@@ -81,7 +104,7 @@ runs:
 
     - name: Set up aube cache
       if: ${{ inputs.cache == 'true' && steps.toolchains.outputs.aube > 0 }}
-      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: ${{ steps.aube-config.outputs.path }}
         key: ${{ inputs.cache-key }}-aube-${{ runner.os }}-${{ runner.arch }}-${{ steps.aube-config.outputs.aube-version }}-${{ steps.aube-config.outputs.node-version }}-${{ hashFiles('**/aube-lock.yaml', '**/pnpm-lock.yaml', '**/bun.lock', '**/yarn.lock', '**/npm-shrinkwrap.lock', '**/package-lock.json') }}
@@ -91,3 +114,24 @@ runs:
           ${{ inputs.cache-key }}-aube-${{ runner.os }}-${{ runner.arch }}-
           ${{ inputs.cache-key }}-aube-${{ runner.os }}-
           ${{ inputs.cache-key }}-aube-
+
+    - name: Configure Terraform plugin cache
+      id: terraform-setup
+      shell: bash
+      if: "${{ inputs.cache == 'true' && steps.toolchains.outputs.terraform > 0 }}"
+      run: |
+        echo "TF_PLUGIN_CACHE_DIR=$HOME/.terraform.d/plugin-cache" >> "$GITHUB_ENV"
+        mkdir --parents "$HOME/.terraform.d/plugin-cache"
+        echo "terraform-version=$(terraform --version -json | jq -r .terraform_version)" >> "$GITHUB_OUTPUT"
+
+    - name: Setup Terraform cache
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
+      if: "${{ inputs.cache == 'true' && steps.toolchains.outputs.terraform > 0 }}"
+      with:
+        path: "~/.terraform.d/plugin-cache"
+        key: ${{ inputs.cache-key }}-terraform-${{ runner.os }}-${{ runner.arch }}-${{ steps.terraform-setup.outputs.terraform-version }}-${{ hashFiles('**/.terraform.lock.hcl') }}
+        restore-keys: |
+          ${{ inputs.cache-key }}-terraform-${{ runner.os }}-${{ runner.arch }}-${{ steps.terraform-setup.outputs.terraform-version }}-
+          ${{ inputs.cache-key }}-terraform-${{ runner.os }}-${{ runner.arch }}-
+          ${{ inputs.cache-key }}-terraform-${{ runner.os }}-
+          ${{ inputs.cache-key }}-terraform-
