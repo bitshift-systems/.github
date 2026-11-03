@@ -14,7 +14,7 @@ inputs:
 
   install-args:
     description: Arguments to pass to the underlying Mise action
-    default: ''
+    default: ""
 
 runs:
   using: composite
@@ -35,6 +35,7 @@ runs:
         {
           echo "rust=$(mise ls --current --installed --json rust | jq -r length)"
           echo "pnpm=$(mise ls --current --installed --json pnpm | jq -r length)"
+          echo "aube=$(mise ls --current --installed --json aube | jq -r length)"
         } >> "${GITHUB_OUTPUT}"
 
     - name: Rust cache
@@ -62,3 +63,31 @@ runs:
         key: ${{ inputs.cache-key }}-pnpm-${{ runner.os }}-${{ runner.arch }}-${{ steps.pnpm-config.outputs.pnpm-version }}-${{ steps.pnpm-config.outputs.node-version }}-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ inputs.cache-key }}-pnpm-${{ runner.os }}-${{ runner.arch }}-${{ steps.pnpm-config.outputs.pnpm-version }}-${{ steps.pnpm-config.outputs.node-version }}-
+          ${{ inputs.cache-key }}-pnpm-${{ runner.os }}-${{ runner.arch }}-${{ steps.pnpm-config.outputs.pnpm-version }}-
+          ${{ inputs.cache-key }}-pnpm-${{ runner.os }}-${{ runner.arch }}-
+          ${{ inputs.cache-key }}-pnpm-${{ runner.os }}-
+          ${{ inputs.cache-key }}-pnpm-
+
+    - name: Determine aube configuration
+      id: aube-config
+      if: ${{ inputs.cache == 'true' && steps.toolchains.outputs.aube > 0 }}
+      shell: bash
+      run: |
+        {
+          echo "path=$(aube store path --silent)"
+          echo "aube-version=$(aube -V --silent | awk '{ print $1 }')"
+          echo "node-version=$(node --version)"
+        } >> "${GITHUB_OUTPUT}"
+
+    - name: Set up aube cache
+      if: ${{ inputs.cache == 'true' && steps.toolchains.outputs.aube > 0 }}
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+      with:
+        path: ${{ steps.aube-config.outputs.path }}
+        key: ${{ inputs.cache-key }}-aube-${{ runner.os }}-${{ runner.arch }}-${{ steps.aube-config.outputs.aube-version }}-${{ steps.aube-config.outputs.node-version }}-${{ hashFiles('**/aube-lock.yaml', '**/pnpm-lock.yaml', '**/bun.lock', '**/yarn.lock', '**/npm-shrinkwrap.lock', '**/package-lock.json') }}
+        restore-keys: |
+          ${{ inputs.cache-key }}-aube-${{ runner.os }}-${{ runner.arch }}-${{ steps.aube-config.outputs.aube-version }}-${{ steps.aube-config.outputs.node-version }}-
+          ${{ inputs.cache-key }}-aube-${{ runner.os }}-${{ runner.arch }}-${{ steps.aube-config.outputs.aube-version }}-
+          ${{ inputs.cache-key }}-aube-${{ runner.os }}-${{ runner.arch }}-
+          ${{ inputs.cache-key }}-aube-${{ runner.os }}-
+          ${{ inputs.cache-key }}-aube-
