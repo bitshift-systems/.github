@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.2.0](https://github.com/bitshift-systems/.github/compare/setup-repo-v2.1.0...setup-repo-v2.2.0) (2026-11-03)
+
+
+### Features
+
+* **setup-repo:** add .NET and Terraform caching ([#18](https://github.com/bitshift-systems/.github/issues/18)) ([e6b3225](https://github.com/bitshift-systems/.github/commit/e6b3225d38e0d35263ac88210f0286e7973f1615))
+
+
+### Miscellaneous Chores
+
+* **github-action:** update github-actions ([#17](https://github.com/bitshift-systems/.github/issues/17)) ([ba72f6f](https://github.com/bitshift-systems/.github/commit/ba72f6f417c257587c62cd5c238f2c9fa03cae4b))
+
 ## [2.1.0](https://github.com/bitshift-systems/.github/compare/setup-repo-v2.0.0...setup-repo-v2.1.0) (2026-11-03)
 
 
