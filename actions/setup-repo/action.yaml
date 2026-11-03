@@ -20,7 +20,7 @@ runs:
   using: composite
   steps:
     - name: Setup Mise
-      uses: jdx/mise-action@6be3c7ed4c21d4f76b208d351d95aac273ebb76d # v5.2.4
+      uses: jdx/mise-action@6612f0ef07ed2a736cd1e00a94a065522dd41195 # v5.2.5
       with:
         install: true
         install_args: ${{ inputs.install-args }}
@@ -81,7 +81,7 @@ runs:
 
     - name: Set up aube cache
       if: ${{ inputs.cache == 'true' && steps.toolchains.outputs.aube > 0 }}
-      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6.1.0
       with:
         path: ${{ steps.aube-config.outputs.path }}
         key: ${{ inputs.cache-key }}-aube-${{ runner.os }}-${{ runner.arch }}-${{ steps.aube-config.outputs.aube-version }}-${{ steps.aube-config.outputs.node-version }}-${{ hashFiles('**/aube-lock.yaml', '**/pnpm-lock.yaml', '**/bun.lock', '**/yarn.lock', '**/npm-shrinkwrap.lock', '**/package-lock.json') }}
