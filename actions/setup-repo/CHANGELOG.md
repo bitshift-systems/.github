@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.2.1](https://github.com/bitshift-systems/.github/compare/setup-repo-v2.2.0...setup-repo-v2.2.1) (2026-11-06)
+
+
+### Miscellaneous Chores
+
+* **github-action:** update action jdx/mise-action (v5.2.5 → v5.2.6) ([#20](https://github.com/bitshift-systems/.github/issues/20)) ([ff97af5](https://github.com/bitshift-systems/.github/commit/ff97af528339e17a73a568d9309bcb4ec1ae20ff))
+
 ## [2.2.0](https://github.com/bitshift-systems/.github/compare/setup-repo-v2.1.0...setup-repo-v2.2.0) (2026-11-03)
 
 
